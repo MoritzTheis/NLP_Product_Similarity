@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Description Similarity</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('/static/bild.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .page-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 90%;
+            max-width: 1200px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .left-section, .right-section {
+            flex: 1;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .left-section {
+            max-width: 45%;
+        }
+
+        .left-section h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .left-section p, .left-section ol {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #ccc;
+        }
+
+        .right-section {
+            max-width: 45%;
+        }
+
+        .right-section .container {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        .right-section h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        form label {
+            display: block;
+            margin: 10px 0 5px;
+            color: #ccc;
+        }
+
+        form input[type="text"] {
+            width: calc(100% - 10px);
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-bottom: 15px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+
+        form input[type="submit"] {
+            background-color: #8B0000;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        form input[type="submit"]:hover {
+            background-color: #800000;
+        }
+
+        pre {
+            background-color: #333;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            overflow-x: auto;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <div class="left-section">
+            <h2>Usage of the Product Description Similarity Model</h2>
+            <p>To use the model:</p>
+            <ol>
+                <li>Enter the first product description in the "First Product Description" field.</li>
+                <li>Enter the second product description in the "Second Product Description" field.</li>
+                <li>Click "Compare" to analyze similarity.</li>
+                <li>View the similarity result in the "Cosine Similarity" section.</li>
+            </ol>
+        </div>
+        <div class="right-section">
+            <div class="container">
+                <h1>Product Description Similarity</h1>
+                <form id="textForm">
+                    <label for="text1">First Product Description:</label>
+                    <input type="text" id="text1" name="text1" required><br><br>
+                    <label for="text2">Second Product Description:</label>
+                    <input type="text" id="text2" name="text2" required><br><br>
+                    <input type="submit" value="Compare">
+                </form>
+                <h2>Cosine Similarity:</h2>
+                <pre id="cosine_similarity"></pre>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById('textForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const text1 = document.getElementById('text1').value;
+            const text2 = document.getElementById('text2').value;
+            
+            const response = await fetch('/encode', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ text1, text2 })
+            });
+            
+            const result = await response.json();
+            document.getElementById('cosine_similarity').textContent = result.cosine_similarity;
+        });
+    </script>
+</body>
+</html>
